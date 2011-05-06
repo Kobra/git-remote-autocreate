@@ -7,7 +7,7 @@ fi
 
 set $SSH_ORIGINAL_COMMAND
 GITCMD=$1
-GITPATH=$(echo $2 |sed -e "s/'$/.git'/" -e "s/~/./g" -e "s/'//g")
+GITPATH=$(echo $2 |sed -e "s/'$/.git'/" -e "s/^~/./" -e "s/'//g")
 
 if [ ! -d ${GITPATH} ]; then
 	mkdir -p ${GITPATH} && cd ${GITPATH} && git --bare init >/dev/null && echo $(basename ${GITPATH%.git}) > description && cd
