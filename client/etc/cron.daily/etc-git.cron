@@ -1,0 +1,29 @@
+#!/bin/sh
+
+cd /etc
+/usr/bin/git add .
+
+modified=$(/usr/bin/git status |grep modified |awk '{print $3}' |head -n 5)
+new=$(/usr/bin/git status |grep new |awk '{print $4}' |head -n 5)
+deleted=$(/usr/bin/git status |grep deleted |awk '{print $3}' |head -n 5)
+
+msg=""
+test "$new" != "" && msg="${msg}
+New files:
+${new}
+"
+
+test "$modified" != "" && msg="${msg}
+Changed files:
+${modified}
+"
+
+test "$deleted" != "" && msg="${msg}
+Deleted files:
+${deleted}
+"
+
+/usr/bin/git commit -a -m "Snapshot: $(date)
+${msg}"
+
+/usr/bin/git push origin master 

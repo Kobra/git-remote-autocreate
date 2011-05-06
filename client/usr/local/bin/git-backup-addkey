@@ -1,0 +1,19 @@
+#!/bin/sh
+
+host=$1
+
+if [ "$host" == "" ]; then
+	echo "Usage: $0 <user@host>"
+	exit
+fi
+
+test -r ~/.ssh/id_*.pub || ssh-keygen -t dsa
+
+keyfile=~/.ssh/id_rsa.pub
+test -r ~/.ssh/id_dsa.pub && keyfile=~/.ssh/id_dsa.pub
+
+key=$(cat $keyfile)
+command='command=\"/usr/local/bin/gitinit\"'
+
+
+ssh $host echo $command $key \>\>.ssh/authorized_keys
